@@ -1,0 +1,116 @@
+\documentclass[uplatex,dvipdfmx]{jsarticle}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+% \usepackage[top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage[dvipdfmx]{graphicx,hyperref}
+\usepackage{here}
+\usepackage{enumerate}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{colortbl}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{tikz}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\rank}{rank}
+
+\newcommand{\transposed}[1]{#1^\mathsf{T}}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+
+\title{数値解析レポート　12/21出題分}
+\author{J4-190507 木下裕太}
+
+\begin{document}
+  \maketitle
+
+  選択した問題: (1), (2)
+
+  \section*{(1)}
+  以下では断りのない限り実数の範囲で考える.
+
+区間$(a,b)$, 重み$w(x)$上の直交多項式系を$\{P_n(x)\}$とする.
+初めに次の補題を示す.
+
+\begin{lemma}
+  任意の非負整数$n$に対し, $P_n(x)$は相異なる$n$個の実根を持つ.
+\end{lemma}
+
+\begin{proof}
+  多項式$Q(x),R(x)$が
+  \begin{equation*}
+    P_n(x)=Q(x)R(x)
+  \end{equation*}
+  を満たし, $Q(x)$は定数でないとする. $R(x)$は高々$n-1$次であるから
+  \begin{eqnarray*}
+    0=\int_a^b P_n(x)R(x) w(x)dx=\int_a^b Q(x)R(x)^2 w(x)dx
+  \end{eqnarray*}
+  $R(x)^2w(x)\neq 0$は常に非負値をとるので, $Q(x)$は区間$(a,b)$上で正値, 負値のいずれもとる.\\
+  この事実により, $P_n(x)$の根は$n$個の実根を持ち, かつそれらは相異なることが分かる.
+
+  % 次に実数$\alpha$, 多項式$S(x)$が
+  % \begin{eqnarray*}
+  %   P_n(x) = (x-\alpha)^2 S(x)
+  % \end{eqnarray*}
+  % を満たすとする. $S(x)$は高々$n-2$次であるが
+  % \begin{eqnarray*}
+  %   0=\int_a^b P_n(x)S(x) w(x)dx=\int_a^b (x-\alpha)^2S(x)^2 w(x)dx>0
+  % \end{eqnarray*}
+  % となり矛盾を得る. ゆえに$P_n(x)$は重根を持たない.
+\end{proof}
+
+上の補題で存在が示された, $P_n(x)$の相異なる実根を$\{x_k\}_{k=1}^n$とし,各$k\in\{1,\cdots, n\}$について$n-1$次多項式を
+\begin{eqnarray*}
+  l_k(x)=\prod_{i\neq k} \cfrac{x-x_i}{x_k-x_i}
+\end{eqnarray*}
+と定める.
+また$f(x)$を高々$2n-1$次の任意の多項式とする.
+このとき, 高々$n-1$次の多項式
+\begin{eqnarray*}
+  g(x)=\sum_{k=1}^n f(x_k)l_k(x)
+\end{eqnarray*}
+は$P_n(x)$の$n$個の零点全てで$f(x)$と一致する.
+したがって$g(x)$は$f(x)$を$P_n(x)$で割った余りであり,
+\begin{equation*}
+f(x)=g(x)+P_n(x)h(x)
+\end{equation*}
+なる高々$n-1$次の多項式$h(x)$が存在する. よって
+\begin{eqnarray*}
+  \int_a^b f(x)w(x)dx &=& \int_a^b g(x)w(x)dx + \int_a^b P_n(x)h(x) w(x)dx\\
+  &=& \sum_{k=1}^n f(x_k)\int_a^b l_k(x)w(x)dx
+\end{eqnarray*}
+であり, 示すべき主張が得られた.
+
+  \section*{(2)}
+  便宜上$t_i = (m + \frac{i}{2})\Delta t $と定める.
+  考えている範囲で$F$のあらゆる偏導関数は有界.
+
+  $y$の$t_1$を中心としたTaylor展開を考えると
+  \begin{eqnarray*}
+    y(t_2)-y(t_0)=y'(t_1)\Delta t + O(\Delta t^3)\\
+    y(t_2)+y(t_0)=2y(t_1) + O(\Delta t^2)
+  \end{eqnarray*}
+であり, $F$についても$(t_1, t_1)$を中心としたTaylor展開を考えると
+\begin{equation*}
+  F(y(t_2), y(t_0))=F(y(t_1), y(t_1))
+  +(y(t_2)-y(t_1))\cfrac{\partial F}{\partial x_1}(t_1,t_1)
+  +(y(t_0)-y(t_1))\cfrac{\partial F}{\partial x_2}(t_1,t_1)
+  +O(\Delta t^2)
+\end{equation*}
+となる. 与えられた$F$の性質から
+\begin{eqnarray*}
+  y'(t_1) = F(y(t_1), y(t_1))\\
+  \cfrac{\partial F}{\partial x_1}(t_1,t_1) = \cfrac{\partial F}{\partial x_2}(t_1,t_1)
+\end{eqnarray*}
+が成り立つことをふまえると,
+\begin{eqnarray*}
+R = (y(t_2)+y(t_0)-2y(t_1))\cfrac{\partial F}{\partial x_1}(t_1,t_1)+O(\Delta t^2)
+=O(\Delta t^2)
+\end{eqnarray*}
+という評価を得る.
+
+\end{document}

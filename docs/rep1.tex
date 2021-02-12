@@ -1,0 +1,59 @@
+\documentclass[uplatex,dvipdfmx]{jsarticle}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+% \usepackage[top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage[dvipdfmx]{graphicx,hyperref}
+\usepackage{here}
+\usepackage{enumerate}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{colortbl}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{tikz}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\rank}{rank}
+
+\newcommand{\transposed}[1]{#1^\mathsf{T}}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+
+\title{数値解析レポート　11/2出題分}
+\author{J4-190507 木下裕太}
+
+\begin{document}
+\maketitle
+
+\section*{(2)}
+修正Gram-Schmidt法では正規直交基底を構成するベクトル$q$が1つ求まるたびに、
+まだ直交化されていないベクトル全てを${\rm span}(q)$の直交補空間に射影している。
+したがって$j$ステップ後では通常のGram-Schmidt法における直交化を第$j+1$項までで打ち切った値が格納されている。
+
+\section*{(3)}
+$\rho(H)<1$ならば、与えられた事実から、ある$\mathbb{R}^n$上のノルム$\|\cdot\|$及び定数$\delta\in[0,1)$が存在して、それが誘導する行列ノルムに関して$\|H\|\le\delta$。
+このとき
+\begin{eqnarray*}
+  \forall x,y\in\mathbb{R}^n,\ \|(Hx+c)-(Hy+c)\|\le\|H\|\|x-y\|\le\delta\|x-y\|
+\end{eqnarray*}
+が成り立つので、縮小写像の原理から主張が従う。
+
+\section*{(4)}
+\begin{verbatim}
+  import numpy as np    # numpy のインポート
+
+  exa = np.pi ** 2 / 6.0  # 正解の級数和
+
+  prev = np.float32(0.0)  # 単精度として定義
+  now = np.float32(0.0)   # 単精度
+
+  for k in range(5000, 0, -1):
+      now = now + np.float32(1.0/k**2)   # 級数の一項を足す
+
+  print(exa, now)        # 真値と計算値を表示
+\end{verbatim}
+
+\end{document}
